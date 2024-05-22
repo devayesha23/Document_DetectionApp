@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Detection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-color: orangered; /* Light gray background */
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff; /* White container background */
+            padding: 20px;
+            border-radius: 8px; /* Rounded corners for container */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Shadow for container */
+        }
+        h1 {
+            color: orangered; /* Dark gray heading color */
+        }
+        button {
+            padding: 10px 20px; /* Padding inside buttons */
+            margin-top: 10px; /* Spacing between buttons */
+            background-color: orangered; /* Blue button background */
+            color: #fff; /* White text color */
+            border: none; /* Remove button border */
+            border-radius: 4px; /* Rounded corners for buttons */
+            cursor: pointer; /* Show pointer cursor on hover */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+        #output {
+            margin-top: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+    <script src="https://static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Document Detection by Filestack</h1>
+        <button id="uploadButton">Upload Document</button>
+        <button id="detectButton" style="display:none;" onclick="detectDocument()">Detect Document</button>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        const apiKey = 'YOUR_API_KEY'; // Replace 'YOUR_API_KEY' with your actual Filestack API key
+        const client = filestack.init(apiKey);
+        let fileHandle = '';
+
+        document.getElementById('uploadButton').addEventListener('click', () => {
+            client.picker({
+                onUploadDone: (result) => {
+                    fileHandle = result.filesUploaded[0].handle;
+                    document.getElementById('detectButton').style.display = 'inline';
+                }
+            }).open();
+        });
+
+        function detectDocument() {
+            const processingUrl = `https://cdn.filestackcontent.com/${apiKey}/security=p:eyJjYWxsIjpbInBpY2siLCJyZWFkIiwic3RhdCIsIndyaXRlIiwid3JpdGVVcmwiLCJzdG9yZSIsImNvbnZlcnQiLCJyZW1vdmUiLCJleGlmIiwicnVuV29ya2Zsb3ciXSwiZXhwaXJ5IjoxNzE2OTIyODAwfQ==,s:110b2a7e0ec002856207c9aee4153bc498ab00a8bdadffd15c0da130c1f0be88/doc_detection=coords:true/${fileHandle}`;
+
+            window.open(processingUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
